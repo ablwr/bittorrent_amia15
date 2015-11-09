@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js – The HTML Presentation Framework</title>
+		<title>this torrent jawns</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -15,7 +15,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+		<link rel="stylesheet" href="css/theme/blood.css" id="theme">
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -41,7 +41,271 @@
 			<div class="slides">
 
 				<section>
-					<h1>init commit</h1>
+					<h2>Seeding and Leeching: Collaborative Preservation using BitTorrent</h2>
+					<h4>Ashley Blewer, #amia15</h4>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<section>
+					<h2>Torrents in archives</h2>
+					<aside class="notes">
+					I’m ready stop talking about how torrents can be archives and let’s talk about how we can use torrents in archives, or as archives. I'm gonna introduce some technical concepts about this technology. Knowledge of technology is power. So let’s talk about how torrents work. Let’s talk about the benefits of this technology.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Torrents as archives</h2>
+					<aside class="notes">
+					I’m not here to talk politics or academics. Reciting introductory-level copyright laws is not just boring, it’s detrimental to moving the conversation forward. Copyright isn’t a factor here.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Copy, right?</h2>
+					<aside class="notes">
+					Wait a minute. Maybe I’m being brash. What if copyright is an issue? Implementing digital rights management into BitTorrent profiles is possible. Private trackers require a handshake to occur between the person initiating joining the torrent stream and the swarm of torrents. There’s a gate here that says “you have to be part of this club if you want to join our swarm."
+					</aside>
+				</section>
+
+				<section>
+					<h2>Copy, right?</h2>
+					<img src="img/sit.gif">
+					<aside class="notes">
+					Wait a minute. Maybe I’m being brash. What if copyright is an issue? Implementing digital rights management into BitTorrent profiles is possible. Private trackers require a handshake to occur between the person initiating joining the torrent stream and the swarm of torrents. There’s a gate here that says “you have to be part of this club if you want to join our swarm."
+					</aside>
+				</section>
+
+				<section>
+					<h2>Tech stacks on stacks</h2>
+					<aside class="notes">
+					Technical stuff… the essence of torrent is that it is just a protocol for sharing data on the internet. What do I mean by protocol? It’s a system of rules just like HTTP or SFTP or IMAP that allows things to move between computers in a certain way. And there are a lot of benefits to the way this protocol works, specifically.
+					</aside>
+				</section>
+
+				<section>
+					<h2>PROTOCOL</h2>
+					<aside class="notes">
+					Technical stuff… the essence of torrent is that it is just a protocol for sharing data on the internet. What do I mean by protocol? It’s a system of rules just like HTTP or SFTP or IMAP that allows things to move between computers in a certain way. And there are a lot of benefits to the way this protocol works, specifically.
+					</aside>
+				</section>
+
+				<section>
+					<h2>HTTP?</h2>
+					<aside class="notes">
+					HTTP is a protocol that is really good at sending documents over the internet. It’s based on REST, representational state transfer, a commonly used software architecture. (GET, PUT, POST, DELETE, etc).
+					</aside>
+				</section>
+
+				<section>
+					<h2>BitTorrent protocol requirements</h2>
+					<ul>
+						<li>a web server</li>
+						<li>'metainfo' file*</li>
+						<li>torrent tracker</li>
+						<li>'original' downloader</li>
+						<li>end user web browsers</li>
+						<li>end user downloaders</li>
+					</ul>
+					<aside class="notes">
+					BitTorrent is a protocol too. Protocols have rules. What does this protocol require?
+
+	        - An ordinary web server
+					- A static 'metainfo' file
+					- A BitTorrent tracker
+					- An 'original' downloader
+					- The end user web browsers
+					- The end user downloaders
+					</aside>
+				</section>
+
+				<section>
+					<h2>BitTorrent as a file</h2>
+					<img src="img/file.png">
+					<aside class="notes">
+					In a “physical of the digital” way, torrents look like this — either a .torrent file or a magnet URI containing the same information to connect to a peer network and information about the targetmedia file (the intended thing to be downloaded, comes in as pieces/chunks, also can be a file with files within it) structured using Bencode, a fancy and flexible binary encoding, for “storing and transmitting loosely structured data” — the benefit and speed of this protocol means that downloading happens collaboratively between peers, randomly (or not truly randomly, but not linearly at least) grabbing data as it is most readily availabl
+					</aside>
+				</section>
+
+				<section>
+					<h2>BitTorrent as a tracker</h2>
+					<img src="">
+					<aside class="notes">
+					Tracker GET requests have the following keys:
+
+info_hash
+The 20 byte sha1 hash of the bencoded form of the info value from the metainfo file. Note that this is a substring of the metainfo file. The info-hash must be the hash of the encoded form as found in the .torrent file, regardless of it being invalid. This value will almost certainly have to be escaped.
+peer_id
+A string of length 20 which this downloader uses as its id. Each downloader generates its own id at random at the start of a new download. This value will also almost certainly have to be escaped.
+ip
+An optional parameter giving the IP (or dns name) which this peer is at. Generally used for the origin if it's on the same machine as the tracker.
+port
+The port number this peer is listening on. Common behavior is for a downloader to try to listen on port 6881 and if that port is taken try 6882, then 6883, etc. and give up after 6889.
+uploaded
+The total amount uploaded so far, encoded in base ten ascii.
+downloaded
+The total amount downloaded so far, encoded in base ten ascii.
+left
+The number of bytes this peer still has to download, encoded in base ten ascii. Note that this can't be computed from downloaded and the file length since it might be a resume, and there's a chance that some of the downloaded data failed an integrity check and had to be re-downloaded.
+event
+This is an optional key which maps to started, completed, or stopped (or empty, which is the same as not being present). If not present, this is one of the announcements done at regular intervals. An announcement using started is sent when a download first begins, and one using completed is sent when the download is complete. No completed is sent if the file was complete when started. Downloaders send an announcement using stopped when they cease downloading.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Peers</h2>
+					<aside class="notes">
+					BitTorrent's peer protocol operates over TCP or uTP (uTorrent Transport Protocol). TCP enables two hosts to establish a connection and exchange streams of data (unlike IP which works with packets). It’s interesting because TCP ensures files are received in order, but torrent files can come in “randomly.” But with TCP, it guarantees data is received.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Handshake</h2>
+					<img src="src/handshake.jpeg">
+					<img src="">
+					<aside class="notes">
+					We call it a handshake. Like gentlemen.
+					</aside>
+				</section>
+
+				<section>
+					<h2>TCP</h2>
+					<img src="img/tcp.png">
+					<aside class="notes">
+					TCP is really good at splitting things into chunks.
+
+					I could nerd out about TCP for a long time. I think it’s a pretty cool protocol. But the important part that matters for this talk is that TCP is very good at making sure data is received. This is good for torrents because it has to constantly check to see how much data is available, has been received, has left to download, and when something is at 100%. We talk about fixity a lot as archivists, checking an entire file for fixity using a checksum to validate. But TCP and torrents are constantly checking EACH LITTLE PIECE for fixity. AND the whole thing.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Two things</h2>
+					<aside class="notes">
+					Connections know two things about themselves and ask two things of other peers.
+					</aside>
+				</section>
+
+				<section>
+					<h2>1. Are you busy?<br/>
+							2. Are you interested?</h2>
+					<aside class="notes">
+						1. Are you busy?
+						2. Are you interested?
+					</aside>
+				</section>
+
+				<section>
+					<img src="img/tinder.gif">
+					<aside class="notes">
+					If you haven’t seen this before, this is a piece of meat swiping right on the dating app Tinder. Living in New York is hard. Anyway, peer connections are always looking for a match.
+					</aside>
+				</section>
+
+				<section>
+					<img src="img/travis.gif">
+					<aside class="notes">
+					Are you busy, are you interested. That can only mean one thing. OK. If it’s all good, downloading will proceed. Remember that this is also happening at such a granular level of the file — every little chunk of information is doing this.
+
+					So a match is found and data can start to be transferred. Please forget my earlier dating analogy completely at this point.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Metainfo file!</h2>
+					<aside class="notes">
+					How does it announce the downloading is finished and complete? The metainfo (torrent) file! It populates the information there.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Randomness</h2>
+					<aside class="notes">
+					Randomness. So this is all happening wildly, madly. I say randomly because that’s how it can be generally perceived. A little bit here, a little bit there. But there’s an algorithm underlying this randomness, which I guess makes it not random. It’s more like “give me whatever you can send over the fastest.”
+
+It’s like being really, really hungry. Torrents are HUNGRY.
+					</aside>
+				</section>
+
+				<section>
+					<img width="400px" src="img/sweep1.gif">
+					<img width="400px" src="img/sweep2.gif">
+					<img width="400px" src="img/sweep3.gif">
+					<aside class="notes">
+					Supermarket Sweep hungry.
+
+Making a mad dash to grab everything, and popping all the pieces (which are identically sized, minus the final piece) into their proper places.
+					</aside>
+				</section>
+
+				<section>
+					<h2>1-to-1</h2>
+					<aside class="notes">
+					Instead of the traditional method which is ... blah blah blah one-to-one
+					</aside>
+				</section>
+
+				<section>
+					<h2>Switching gears</h2>
+					<aside class="notes">
+					I lied about not getting academic or political.
+					</aside>
+				</section>
+
+				<section>
+					<img src="img/levels.jpg">
+					<aside class="notes">
+					Oh look, the NDSA levels of preservation! I don't expect you to be able to read this, but I expect that all of you have this completely memorized already, right?
+
+					Thinking about the NDSA levels of preservation: It's pretty easy to cover all levels of preservation with this protocol, especially if there's institutional support behind it.
+
+					But what it means is lots of people have verified copies of a digital file, this fulfills the archival mantra of LOCKSS (Lots of Copies Keep Stuff Safe). The more copies there are distributed, the stronger a file is.
+
+					Fixity is sorta constantly being checked. Torrents use checksums to verify file fixity as well! So they are already archivally sound in that way! Torrents are validated via an MD5 hash. And in fact this hash must validate in order to work and continue to be part of the same torrent swarm.
+
+					Security can be monitored by making the torrent private, metadata can and usually is packaged, and media files are interoperable, using formats and codecs that allow for the largest possible audience.
+					</aside>
+				</section>
+
+				<section>
+					<p>“When a file is made available using HTTP, all upload cost is placed on the hosting machine. With BitTorrent, when multiple people are downloading the same file at the same time, they upload pieces of the file to each other. This redistributes the cost of upload to downloaders, (where it is often not even metered), thus making hosting a file with a potentially unlimited number of downloaders affordable.”</p>
+					<aside class="notes">
+					“When a file is made available using HTTP, all upload cost is placed on the hosting machine. With BitTorrent, when multiple people are downloading the same file at the same time, they upload pieces of the file to each other. This redistributes the cost of upload to downloaders, (where it is often not even metered), thus making hosting a file with a potentially unlimited number of downloaders affordable.” --  This is from a white paper authored by the creator of this protocol, available bittorrent.org. http://bittorrent.org/bittorrentecon.pdf
+					</aside>
+				</section>
+
+				<section>
+					<h2>$ Bandwidth $</h2>
+					<aside class="notes">
+					Bandwidth politics are icky much like copyright politics — lots of variables. I think this is interesting. I don't have time to talk about this. Much like copyright, there's not a clear answer here.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Start doing</h2>
+					<aside class="notes">
+					So I hope my talk and the following talks prove that this isn’t a hypothetical situation. This is something that can actually be implemented, and I’d like to see it implemented. The technology is right there, so it just needs some technical and community support to facilitate archives — particularly small archives or archives with little institutional support — into being stronger and more community-driven. I want to emphasize that what we are talking about isn’t a theoretical concept, it’s a real concept that works for Internet Archive, with the Prelinger archives and XFR Collective as examples of that,  and Democracy Now! and private trackers.
+					</aside>
+				</section>
+
+				<section>
+					<h2>XFR Collective</h2>
+					<aside class="notes">
+					I’m not gonna talk about the Prelinger archives because he is literally right here in this room with me right next to me, but I do volunteer at XFR Collective, a nonprofit that transfers magnetic media, and our primary method for access and storage is the Internet Archive.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Democracy Now!</h2>
+					<aside class="notes">
+					Democracy Now! has a good thing going with using torrents as distribution: only the five most recent episodes, because they know distributed downloading only works really well when there are many people sharing. http://www.democracynow.org/pages/help/torrent
+					</aside>
+				</section>
+
+				<section>
+					<h2>The end</h2>
+					<img src="img/yes.gif">
+					<aside class="notes">
+					</aside>
 				</section>
 
 			</div>
